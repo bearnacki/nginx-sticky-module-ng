@@ -17,11 +17,11 @@
 #endif
 
 /* - fix for 1.11.2 removes include <openssl/md5.h> in ngx_md5.h */
+#ifndef MD5_CBLOCK
 #define MD5_CBLOCK  64
 #define MD5_LBLOCK  (MD5_CBLOCK/4)
 #define MD5_DIGEST_LENGTH 16
-#define SHA_CBLOCK 64
-#define SHA_DIGEST_LENGTH 20
+#endif
 
 #ifndef SHA_DIGEST_LENGTH
 #define SHA_CBLOCK 64
@@ -36,7 +36,7 @@ static ngx_int_t cookie_expires(char *str, size_t size, time_t t)
   char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
   char *wdays[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
   struct tm  e;
-  gmtime_r(&t, &e);
+  gmtime_s(&e, &t);
   return snprintf(str, size, "%s, %02d-%s-%04d %02d:%02d:%02d GMT",
     wdays[e.tm_wday], e.tm_mday, months[e.tm_mon], e.tm_year + 1900, e.tm_hour,e.tm_min,e.tm_sec);
 }
